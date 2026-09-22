@@ -56,6 +56,37 @@ Q6_ANSWERS = {
     "깨끗이": "부사",
 }
 
+
+Q7_ANSWERS = {
+    "착한": ["착하-", "-ㄴ"],
+    "형": ["형"],
+    "은": ["은"],
+    "지우개": ["지우-", "-개"],
+    "로": ["로"],
+    "낡은": ["낡-", "-은"],
+    "공책": ["공책"],
+    "의": ["의"],
+    "글씨": ["글씨"],
+    "를": ["를"],
+    "깨끗이": ["깨끗", "-이"],
+    "지웠다": ["지우-", "-었-", "-다"],
+}
+
+Q8_ANSWERS = {
+    "착한": "형용사",
+    "형": "명사",
+    "은": "조사",
+    "지우개": "명사",
+    "로": "조사",
+    "낡은": "형용사",
+    "공책": "명사",
+    "의": "조사",
+    "글씨": "명사",
+    "를": "조사",
+    "깨끗이": "부사",
+    "지웠다": "동사",
+}
+
 def normalize_sequence(text: str):
     if not text:
         return []
@@ -103,8 +134,11 @@ st.markdown("""
 st.title("📝 퇴계원중 1학년 중간고사 대비 문항 연습")
 st.caption("중간고사에 필요한 국어 문법 개념을 문항별로 연습합니다.")
 
-tabs = st.tabs(["1️⃣ 문항 1", "2️⃣ 문항 2", "3️⃣ 문항 3", "4️⃣ 문항 4", "5️⃣ 문항 5", "6️⃣ 문항 6"])
-tab1, tab2, tab3, tab4, tab5, tab6 = tabs
+tabs = st.tabs([
+    "1️⃣ 문항 1", "2️⃣ 문항 2", "3️⃣ 문항 3", "4️⃣ 문항 4",
+    "5️⃣ 문항 5", "6️⃣ 문항 6", "7️⃣ 문항 7", "8️⃣ 문항 8"
+])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = tabs
 
 # 문항 1
 with tab1:
@@ -286,6 +320,98 @@ with tab6:
                 st.success("두 파생어의 품사를 모두 정확하게 썼습니다!")
             else:
                 st.warning("다시 확인할 단어: " + ", ".join(wrong))
+
+# 문항 7
+with tab7:
+    st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>', unsafe_allow_html=True)
+    st.subheader("7. 문장에 쓰인 모든 단어를 형태소 단위로 분석하세요.")
+
+    st.markdown("""
+    <div class="condition-box">
+    ✅ 각 단어를 형태소 단위로 분석하세요.<br>
+    ✅ 형태소 사이는 <b>쉼표(,)</b> 또는 <b>슬래시(/)</b>로 구분해도 됩니다.<br>
+    ✅ 접사·어간·어미의 <b>붙임표 위치까지 정확하게</b> 써야 정답으로 인정합니다.<br>
+    ✅ ‘지웠다’는 줄어든 형태이므로 기본 형태를 밝혀 분석하세요.
+    </div>
+    """, unsafe_allow_html=True)
+
+    q7_user = {}
+    words7 = list(Q7_ANSWERS.keys())
+    c1, c2 = st.columns(2)
+
+    for i, word in enumerate(words7):
+        with (c1 if i % 2 == 0 else c2):
+            q7_user[word] = st.text_input(
+                word,
+                placeholder="형태소 분석",
+                key=f"q7_{i}"
+            )
+
+    if st.button("7번 제출", type="primary", key="submit7"):
+        blank = []
+        wrong = []
+
+        for word, answer in Q7_ANSWERS.items():
+            user_answer = q7_user[word]
+            if not user_answer.strip():
+                blank.append(word)
+            elif normalize_sequence(user_answer) != answer:
+                wrong.append(word)
+
+        if not blank and not wrong:
+            st.success("모든 단어의 형태소 분석이 정확합니다!")
+        else:
+            if blank:
+                st.warning("아직 분석하지 않은 단어: " + ", ".join(blank))
+            if wrong:
+                st.warning("다시 확인할 단어: " + ", ".join(wrong))
+
+            if "지웠다" in wrong:
+                with st.expander("💡 '지웠다' 힌트 보기"):
+                    st.write("‘지웠다’는 줄어든 형태입니다.")
+                    st.write("기본형 ‘지우다’를 떠올리고, 어간과 과거 시제 선어말 어미, 종결 어미로 나누어 보세요.")
+
+            st.info("정답은 바로 보여주지 않습니다. 틀린 단어만 고쳐서 다시 제출해 보세요.")
+
+
+# 문항 8
+with tab8:
+    st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>', unsafe_allow_html=True)
+    st.subheader("8. 문장에 쓰인 모든 단어의 품사를 쓰세요.")
+    st.info("각 칸에 품사 이름을 직접 입력하세요.")
+
+    q8_user = {}
+    words8 = list(Q8_ANSWERS.keys())
+    c1, c2 = st.columns(2)
+
+    for i, word in enumerate(words8):
+        with (c1 if i % 2 == 0 else c2):
+            q8_user[word] = st.text_input(
+                word,
+                placeholder="품사 입력",
+                key=f"q8_{i}"
+            ).strip()
+
+    if st.button("8번 제출", type="primary", key="submit8"):
+        blank = []
+        wrong = []
+
+        for word, answer in Q8_ANSWERS.items():
+            user_answer = q8_user[word]
+            if not user_answer:
+                blank.append(word)
+            elif user_answer != answer:
+                wrong.append(word)
+
+        if not blank and not wrong:
+            st.success("모든 단어의 품사를 정확하게 썼습니다!")
+        else:
+            if blank:
+                st.warning("아직 쓰지 않은 단어: " + ", ".join(blank))
+            if wrong:
+                st.warning("다시 확인할 단어: " + ", ".join(wrong))
+            st.info("정답은 바로 보여주지 않습니다. 해당 단어만 고쳐서 다시 제출해 보세요.")
+
 
 st.divider()
 if st.button("처음부터 다시 풀기"):
