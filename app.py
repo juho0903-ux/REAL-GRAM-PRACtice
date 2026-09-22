@@ -89,6 +89,26 @@ Q8_ANSWERS = {
 }
 
 
+Q9_TYPE_ANSWERS = {
+    "자립 형태소": ["형", "공책", "글씨"],
+    "의존 형태소": [
+        "착하-", "-ㄴ", "은", "지우-", "-개", "로", "낡-", "-은",
+        "의", "를", "깨끗", "-이", "지우-", "-었-", "-다"
+    ],
+    "실질 형태소": ["착하-", "형", "지우-", "낡-", "공책", "글씨", "깨끗", "지우-"],
+    "형식 형태소": ["-ㄴ", "은", "-개", "로", "-은", "의", "를", "-이", "-었-", "-다"],
+}
+
+Q14_TYPE_ANSWERS = {
+    "자립 형태소": ["동생", "사과", "접시"],
+    "의존 형태소": [
+        "어리-", "-ㄴ", "이", "풋-", "를", "작-", "-은", "에",
+        "가지런", "-히", "담-", "-았-", "-다"
+    ],
+    "실질 형태소": ["어리-", "동생", "사과", "작-", "접시", "가지런", "담-"],
+    "형식 형태소": ["-ㄴ", "이", "풋-", "를", "-은", "에", "-히", "-았-", "-다"],
+}
+
 Q9_ANSWERS = ["풋사과", "가지런히"]
 
 Q10_ANSWERS = {
@@ -425,9 +445,10 @@ st.caption("중간고사에 필요한 국어 문법 개념을 문항별로 연�
 tabs = st.tabs([
     "1️⃣ 문항 1", "2️⃣ 문항 2", "3️⃣ 문항 3", "4️⃣ 문항 4",
     "5️⃣ 문항 5", "6️⃣ 문항 6", "7️⃣ 문항 7", "8️⃣ 문항 8",
-    "9️⃣ 문항 9", "🔟 문항 10", "11 문항 11", "12 문항 12", "13 문항 13"
+    "9️⃣ 문항 9", "10 문항 10", "11 문항 11", "12 문항 12",
+    "13 문항 13", "14 문항 14", "15 문항 15"
 ])
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13 = tabs
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13, tab14, tab15 = tabs
 
 # 문항 1
 with tab1:
@@ -696,14 +717,53 @@ with tab8:
 
 # 문항 9
 with tab9:
+    st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>', unsafe_allow_html=True)
+    st.subheader("9. 문장의 형태소를 종류별로 분류해 보세요.")
+
+    st.markdown("""
+    <div class="condition-box">
+    ✅ 아래 네 칸에 해당 형태소를 직접 쓰세요.<br>
+    ✅ 형태소 사이는 <b>쉼표(,)</b>로 구분하세요.<br>
+    ✅ 접사·어간·어미의 <b>붙임표 위치까지 정확하게</b> 써야 정답으로 인정합니다.<br>
+    ✅ 형태소의 순서는 달라도 됩니다.
+    </div>
+    """, unsafe_allow_html=True)
+
+    q9_self = st.text_area("자립 형태소", key="q9_self")
+    q9_dependent = st.text_area("의존 형태소", key="q9_dependent")
+    q9_lexical = st.text_area("실질 형태소", key="q9_lexical")
+    q9_grammatical = st.text_area("형식 형태소", key="q9_grammatical")
+
+    if st.button("9번 제출", type="primary", key="submit9_types"):
+        user_map = {
+            "자립 형태소": q9_self,
+            "의존 형태소": q9_dependent,
+            "실질 형태소": q9_lexical,
+            "형식 형태소": q9_grammatical,
+        }
+
+        all_ok = True
+        for category, user_text in user_map.items():
+            if exact_multiset_match(user_text, Q9_TYPE_ANSWERS[category]):
+                st.success(f"{category}: 정확합니다.")
+            else:
+                all_ok = False
+                st.warning(f"{category}: 누락·중복 또는 붙임표 위치를 다시 확인해 보세요.")
+
+        if all_ok:
+            st.success("네 종류의 형태소를 모두 정확하게 분류했습니다!")
+
+
+# 문항 10
+with tab10:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
-    st.subheader("9. 윗문장에서 파생어를 모두 찾아 쓰세요.")
+    st.subheader("10. 윗문장에서 파생어를 모두 찾아 쓰세요.")
 
-    q9_1 = st.text_input("파생어 1", key="q9_1")
-    q9_2 = st.text_input("파생어 2", key="q9_2")
+    q10_find_1 = st.text_input("파생어 1", key="q10_find_1")
+    q10_find_2 = st.text_input("파생어 2", key="q10_find_2")
 
-    if st.button("9번 제출", type="primary", key="submit9"):
-        answers = [q9_1.strip(), q9_2.strip()]
+    if st.button("10번 제출", type="primary", key="submit10_find"):
+        answers = [q10_find_1.strip(), q10_find_2.strip()]
         if Counter(answers) == Counter(Q9_ANSWERS):
             st.success("파생어를 모두 정확하게 찾았습니다!")
         else:
@@ -712,10 +772,10 @@ with tab9:
                 st.write("어근에 접사가 붙어 새 단어가 된 경우를 찾아보세요.")
 
 
-# 문항 10
-with tab10:
+# 문항 11
+with tab11:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
-    st.subheader("10. 문항 9에서 찾은 파생어를 형태소 단위로 분석하세요.")
+    st.subheader("11. 파생어를 형태소 단위로 분석하세요.")
 
     st.markdown("""
     <div class="condition-box">
@@ -723,14 +783,14 @@ with tab10:
     </div>
     """, unsafe_allow_html=True)
 
-    q10_1 = st.text_input("풋사과", key="q10_1")
-    q10_2 = st.text_input("가지런히", key="q10_2")
+    q11_m1 = st.text_input("풋사과", key="q11_m1")
+    q11_m2 = st.text_input("가지런히", key="q11_m2")
 
-    if st.button("10번 제출", type="primary", key="submit10"):
+    if st.button("11번 제출", type="primary", key="submit11_morph"):
         wrong = []
-        if normalize_sequence(q10_1) != Q10_ANSWERS["풋사과"]:
+        if normalize_sequence(q11_m1) != Q10_ANSWERS["풋사과"]:
             wrong.append("풋사과")
-        if normalize_sequence(q10_2) != Q10_ANSWERS["가지런히"]:
+        if normalize_sequence(q11_m2) != Q10_ANSWERS["가지런히"]:
             wrong.append("가지런히")
 
         if not wrong:
@@ -739,19 +799,20 @@ with tab10:
             st.warning("다시 확인할 단어: " + ", ".join(wrong))
             st.info("형태소의 순서와 붙임표 위치까지 확인해 보세요.")
 
-# 문항 11
-with tab11:
+
+# 문항 12
+with tab12:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
-    st.subheader("11. 문항 9에서 찾은 각 파생어의 품사를 쓰세요.")
+    st.subheader("12. 각 파생어의 품사를 쓰세요.")
 
-    q11_1 = st.text_input("풋사과", placeholder="품사 입력", key="q11_1")
-    q11_2 = st.text_input("가지런히", placeholder="품사 입력", key="q11_2")
+    q12_p1 = st.text_input("풋사과", placeholder="품사 입력", key="q12_p1")
+    q12_p2 = st.text_input("가지런히", placeholder="품사 입력", key="q12_p2")
 
-    if st.button("11번 제출", type="primary", key="submit11"):
+    if st.button("12번 제출", type="primary", key="submit12_pos"):
         wrong = []
-        if q11_1.strip() != Q11_ANSWERS["풋사과"]:
+        if q12_p1.strip() != Q11_ANSWERS["풋사과"]:
             wrong.append("풋사과")
-        if q11_2.strip() != Q11_ANSWERS["가지런히"]:
+        if q12_p2.strip() != Q11_ANSWERS["가지런히"]:
             wrong.append("가지런히")
 
         if not wrong:
@@ -759,10 +820,11 @@ with tab11:
         else:
             st.warning("다시 확인할 단어: " + ", ".join(wrong))
 
-# 문항 12
-with tab12:
+
+# 문항 13
+with tab13:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
-    st.subheader("12. 문장에 쓰인 모든 단어를 형태소 단위로 분석하세요.")
+    st.subheader("13. 문장에 쓰인 모든 단어를 형태소 단위로 분석하세요.")
 
     st.markdown("""
     <div class="condition-box">
@@ -772,24 +834,24 @@ with tab12:
     </div>
     """, unsafe_allow_html=True)
 
-    q12_user = {}
-    words12 = list(Q12_ANSWERS.keys())
+    q13_user = {}
+    words13 = list(Q12_ANSWERS.keys())
     c1, c2 = st.columns(2)
 
-    for i, word in enumerate(words12):
+    for i, word in enumerate(words13):
         with (c1 if i % 2 == 0 else c2):
-            q12_user[word] = st.text_input(
+            q13_user[word] = st.text_input(
                 word,
                 placeholder="형태소 분석",
-                key=f"q12_{i}"
+                key=f"q13_morph_{i}"
             )
 
-    if st.button("12번 제출", type="primary", key="submit12"):
+    if st.button("13번 제출", type="primary", key="submit13_morph"):
         blank = []
         wrong = []
 
         for word, answer in Q12_ANSWERS.items():
-            user_answer = q12_user[word]
+            user_answer = q13_user[word]
             if not user_answer.strip():
                 blank.append(word)
             elif normalize_sequence(user_answer) != answer:
@@ -805,30 +867,69 @@ with tab12:
             st.info("정답은 바로 보여주지 않습니다. 틀린 단어만 고쳐서 다시 제출해 보세요.")
 
 
-# 문항 13
-with tab13:
+# 문항 14
+with tab14:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
-    st.subheader("13. 문장에 쓰인 모든 단어의 품사를 쓰세요.")
+    st.subheader("14. 문장의 형태소를 종류별로 분류해 보세요.")
+
+    st.markdown("""
+    <div class="condition-box">
+    ✅ 아래 네 칸에 해당 형태소를 직접 쓰세요.<br>
+    ✅ 형태소 사이는 <b>쉼표(,)</b>로 구분하세요.<br>
+    ✅ 접사·어간·어미의 <b>붙임표 위치까지 정확하게</b> 써야 정답으로 인정합니다.<br>
+    ✅ 형태소의 순서는 달라도 됩니다.
+    </div>
+    """, unsafe_allow_html=True)
+
+    q14_self = st.text_area("자립 형태소", key="q14_self")
+    q14_dependent = st.text_area("의존 형태소", key="q14_dependent")
+    q14_lexical = st.text_area("실질 형태소", key="q14_lexical")
+    q14_grammatical = st.text_area("형식 형태소", key="q14_grammatical")
+
+    if st.button("14번 제출", type="primary", key="submit14_types"):
+        user_map = {
+            "자립 형태소": q14_self,
+            "의존 형태소": q14_dependent,
+            "실질 형태소": q14_lexical,
+            "형식 형태소": q14_grammatical,
+        }
+
+        all_ok = True
+        for category, user_text in user_map.items():
+            if exact_multiset_match(user_text, Q14_TYPE_ANSWERS[category]):
+                st.success(f"{category}: 정확합니다.")
+            else:
+                all_ok = False
+                st.warning(f"{category}: 누락·중복 또는 붙임표 위치를 다시 확인해 보세요.")
+
+        if all_ok:
+            st.success("네 종류의 형태소를 모두 정확하게 분류했습니다!")
+
+
+# 문항 15
+with tab15:
+    st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
+    st.subheader("15. 문장에 쓰인 모든 단어의 품사를 쓰세요.")
     st.info("각 칸에 품사 이름을 직접 입력하세요.")
 
-    q13_user = {}
-    words13 = list(Q13_ANSWERS.keys())
+    q15_user = {}
+    words15 = list(Q13_ANSWERS.keys())
     c1, c2 = st.columns(2)
 
-    for i, word in enumerate(words13):
+    for i, word in enumerate(words15):
         with (c1 if i % 2 == 0 else c2):
-            q13_user[word] = st.text_input(
+            q15_user[word] = st.text_input(
                 word,
                 placeholder="품사 입력",
-                key=f"q13_{i}"
+                key=f"q15_pos_{i}"
             ).strip()
 
-    if st.button("13번 제출", type="primary", key="submit13"):
+    if st.button("15번 제출", type="primary", key="submit15_pos"):
         blank = []
         wrong = []
 
         for word, answer in Q13_ANSWERS.items():
-            user_answer = q13_user[word]
+            user_answer = q15_user[word]
             if not user_answer:
                 blank.append(word)
             elif user_answer != answer:
@@ -842,7 +943,6 @@ with tab13:
             if wrong:
                 st.warning("다시 확인할 단어: " + ", ".join(wrong))
             st.info("정답은 바로 보여주지 않습니다. 해당 단어만 고쳐서 다시 제출해 보세요.")
-
 
 st.divider()
 if st.button("처음부터 다시 풀기"):
