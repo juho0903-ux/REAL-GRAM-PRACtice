@@ -144,79 +144,93 @@ def reset_all():
         del st.session_state[key]
     st.rerun()
 
-if "q4_correct" not in st.session_state:
-    st.session_state.q4_correct = False
-
-if "q9_correct" not in st.session_state:
-    st.session_state.q9_correct = False
-
 st.markdown("""
 <style>
 :root {
-    --bg: #fffaf1;
-    --surface: #fffdf8;
-    --surface-soft: #fff7ef;
-    --mint: #d9efe7;
-    --mint-deep: #8fbeb0;
-    --mint-border: #c7e8dc;
-    --coral: #f5a69a;
-    --coral-deep: #ea8f81;
-    --text-main: #3e4a49;
-    --text-soft: #6d7674;
-    --line: #efe6da;
-    --shadow: 0 8px 24px rgba(96, 88, 72, 0.05);
-    --radius-card: 20px;
-    --radius-btn: 16px;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f7f8fa;
+    --surface-3: #eef4f3;
+    --text: #111827;
+    --text-soft: #4b5563;
+    --border: #d7dde5;
+    --mint: #dff3ee;
+    --mint-strong: #70b8a5;
+    --coral: #ff9e8f;
+    --coral-strong: #ef806e;
+    --success-bg: #edf9f1;
+    --warning-bg: #fff8e8;
+    --error-bg: #fff0f0;
+    --info-bg: #eef5ff;
+    --shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
 }
 
-html, body, [class*="css"] {
-    color: var(--text-main);
+html, body, .stApp, [data-testid="stAppViewContainer"] {
+    background: var(--bg) !important;
+    color: var(--text) !important;
 }
 
-.stApp {
-    background:
-        radial-gradient(circle at top right, rgba(217, 239, 231, 0.28), transparent 22%),
-        radial-gradient(circle at top left, rgba(245, 166, 154, 0.10), transparent 20%),
-        var(--bg);
+html, body, .stApp, button, input, textarea, select, p, span, div, label {
+    font-family: "Maplestory", "Maplestory OTF", "Apple SD Gothic Neo",
+                 "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif !important;
 }
 
 .block-container {
     max-width: 1080px;
-    padding-top: 2rem;
-    padding-bottom: 3.5rem;
-    padding-left: 1.1rem;
-    padding-right: 1.1rem;
+    padding-top: 1.6rem;
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
-h1, h2, h3 {
-    color: var(--text-main);
-    letter-spacing: -0.02em;
+h1, h2, h3, h4, p, label, .stCaption {
+    color: var(--text) !important;
+}
+
+.stCaption, small {
+    color: var(--text-soft) !important;
 }
 
 h1 {
     font-weight: 800;
-    margin-bottom: 0.2rem;
+    letter-spacing: -0.03em;
 }
 
 h2, h3 {
     font-weight: 750;
+    letter-spacing: -0.02em;
 }
 
-p, label, .stCaption {
-    color: var(--text-soft);
-}
-
-div[data-testid="stTabs"] {
-    margin-top: 1rem;
-}
-
-div[data-baseweb="tab-list"] {
-    gap: 0.45rem;
-    background: rgba(255, 253, 248, 0.88);
-    border: 1px solid var(--line);
-    padding: 0.45rem;
+.sentence-box {
+    background: var(--surface-3);
+    color: var(--text);
+    border: 1px solid #cfe1dc;
     border-radius: 20px;
+    padding: 18px 20px;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    margin: 10px 0 20px 0;
     box-shadow: var(--shadow);
+}
+
+.condition-box {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 15px 18px;
+    margin: 10px 0 18px 0;
+    line-height: 1.85;
+    box-shadow: var(--shadow);
+}
+
+/* Tabs */
+div[data-baseweb="tab-list"] {
+    gap: 0.4rem;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border);
+    padding: 0.4rem;
+    border-radius: 18px;
     overflow-x: auto;
     scrollbar-width: none;
 }
@@ -226,185 +240,180 @@ div[data-baseweb="tab-list"]::-webkit-scrollbar {
 }
 
 button[data-baseweb="tab"] {
-    height: auto;
     white-space: nowrap;
-    border-radius: 16px !important;
-    background: transparent;
-    border: 1px solid transparent;
-    color: var(--text-soft);
-    font-weight: 700;
-    padding: 0.65rem 1rem;
-    transition: all 0.18s ease;
+    border-radius: 14px !important;
+    color: var(--text-soft) !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    font-weight: 700 !important;
+    padding: 0.62rem 0.9rem !important;
 }
 
 button[data-baseweb="tab"]:hover {
-    background: #fffaf4;
-    border-color: var(--line);
-    color: var(--text-main);
+    background: #ffffff !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
 }
 
 button[aria-selected="true"][data-baseweb="tab"] {
-    background: var(--mint);
-    border-color: var(--mint-border);
-    color: var(--text-main);
-    box-shadow: 0 4px 14px rgba(143, 190, 176, 0.12);
+    background: var(--mint) !important;
+    color: var(--text) !important;
+    border-color: #b9ded4 !important;
 }
 
-div[data-testid="stVerticalBlock"] > div:has(> .sentence-box),
-div[data-testid="stVerticalBlock"] > div:has(> .condition-box) {
-    width: 100%;
-}
-
-.sentence-box {
-    background: linear-gradient(180deg, #f8fffc 0%, #f6fbf8 100%);
-    border: 1px solid var(--mint-border);
-    border-radius: var(--radius-card);
-    padding: 20px 22px;
-    font-size: 1.08rem;
-    line-height: 1.7;
-    margin: 10px 0 22px 0;
-    box-shadow: var(--shadow);
-}
-
-.sentence-box b {
-    display: inline-block;
-    font-size: 1rem;
-    margin-bottom: 0.35rem;
-    color: var(--text-main);
-}
-
-.condition-box {
-    background: linear-gradient(180deg, #fffdf9 0%, #fff8f2 100%);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
-    padding: 16px 18px;
-    margin: 10px 0 20px 0;
-    line-height: 1.9;
-    box-shadow: var(--shadow);
-}
-
-div[data-testid="stTextInputRootElement"] > div,
-div[data-testid="stTextAreaRootElement"] textarea,
-div[data-baseweb="input"] > div {
-    border-radius: 20px !important;
-}
-
+/* Text inputs / text areas */
 div[data-baseweb="input"] > div,
 div[data-testid="stTextAreaRootElement"] textarea {
-    background: var(--surface) !important;
-    border: 1px solid #eadfd2 !important;
-    box-shadow: inset 0 1px 2px rgba(120, 105, 88, 0.03);
-    color: var(--text-main) !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1.5px solid #cfd6df !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
 }
 
-div[data-baseweb="input"] > div:hover,
-div[data-testid="stTextAreaRootElement"] textarea:hover {
-    border-color: var(--mint-border) !important;
+div[data-baseweb="input"] input,
+div[data-testid="stTextAreaRootElement"] textarea {
+    color: #111827 !important;
+    caret-color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+}
+
+div[data-baseweb="input"] input::placeholder,
+div[data-testid="stTextAreaRootElement"] textarea::placeholder {
+    color: #8a94a3 !important;
+    opacity: 1 !important;
 }
 
 div[data-baseweb="input"] > div:focus-within,
 div[data-testid="stTextAreaRootElement"] textarea:focus {
-    border-color: var(--mint-deep) !important;
-    box-shadow: 0 0 0 4px rgba(217, 239, 231, 0.55) !important;
+    border-color: var(--mint-strong) !important;
+    box-shadow: 0 0 0 3px rgba(112, 184, 165, 0.18) !important;
 }
 
 label[data-testid="stWidgetLabel"] p {
-    font-weight: 700;
-    color: var(--text-main);
+    color: var(--text) !important;
+    font-weight: 700 !important;
 }
 
-button[kind="primary"],
-button[kind="secondary"],
+/* Buttons */
 div.stButton > button {
-    border-radius: var(--radius-btn) !important;
+    border-radius: 16px !important;
     min-height: 46px;
-    padding: 0.62rem 1.15rem;
-    font-weight: 700;
-    border: 1px solid transparent;
-    box-shadow: 0 6px 18px rgba(234, 143, 129, 0.14);
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    padding: 0.62rem 1.1rem;
+    font-weight: 800 !important;
+    border: 1px solid transparent !important;
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.08) !important;
 }
 
 div.stButton > button[kind="primary"] {
-    background: var(--coral);
-    color: white;
+    background: var(--coral) !important;
+    color: #ffffff !important;
 }
 
 div.stButton > button[kind="primary"]:hover {
-    background: var(--coral-deep);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(234, 143, 129, 0.18);
+    background: var(--coral-strong) !important;
+    color: #ffffff !important;
 }
 
 div.stButton > button[kind="secondary"] {
-    background: var(--surface);
-    color: var(--text-main);
-    border-color: var(--line);
+    background: #ffffff !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
 }
 
 div.stButton > button[kind="secondary"]:hover {
-    background: var(--surface-soft);
-    border-color: var(--mint-border);
+    background: var(--surface-2) !important;
 }
 
+/* Alerts: force readable text in both light/dark themes */
 div[data-testid="stAlert"] {
-    border-radius: var(--radius-card);
-    border: none;
+    border-radius: 18px !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
     box-shadow: var(--shadow);
 }
 
+div[data-testid="stAlert"] * {
+    color: var(--text) !important;
+}
+
+div[data-testid="stNotification"] {
+    color: var(--text) !important;
+}
+
+/* Expanders */
 div[data-testid="stExpander"] {
-    border-radius: var(--radius-card);
-    border: 1px solid var(--line);
-    background: rgba(255, 253, 248, 0.9);
-    overflow: hidden;
+    background: #ffffff !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
     box-shadow: var(--shadow);
+    overflow: hidden;
 }
 
-div[data-testid="stExpander"] details summary {
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
-    color: var(--text-main);
-    font-weight: 700;
+div[data-testid="stExpander"] summary,
+div[data-testid="stExpander"] summary * {
+    color: var(--text) !important;
+    font-weight: 700 !important;
 }
 
+/* Divider */
 hr {
-    border-color: var(--line);
-    margin-top: 2.2rem;
-    margin-bottom: 1.4rem;
+    border-color: var(--border) !important;
+    margin: 2rem 0 1.25rem 0;
 }
 
+/* Mobile */
 @media (max-width: 768px) {
     .block-container {
-        padding-top: 1.1rem;
-        padding-left: 0.85rem;
-        padding-right: 0.85rem;
-        padding-bottom: 2.5rem;
+        padding-top: 1rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        padding-bottom: 2.25rem;
     }
 
     h1 {
-        font-size: 1.8rem;
-        line-height: 1.25;
+        font-size: 1.72rem !important;
+        line-height: 1.28 !important;
     }
 
     h2, h3 {
-        font-size: 1.45rem;
-        line-height: 1.3;
+        font-size: 1.28rem !important;
+        line-height: 1.35 !important;
     }
 
     .sentence-box,
     .condition-box {
-        padding: 16px 16px;
-        border-radius: 18px;
+        padding: 15px 15px;
+        border-radius: 16px;
     }
 
     div.stButton > button {
-        width: 100%;
+        width: 100% !important;
     }
 
     button[data-baseweb="tab"] {
-        padding: 0.58rem 0.9rem;
-        font-size: 0.96rem;
+        font-size: 0.94rem !important;
+        padding: 0.56rem 0.78rem !important;
+    }
+
+    div[data-testid="column"] {
+        min-width: 0 !important;
+    }
+}
+
+/* Force readable UI even when Streamlit/browser theme is dark */
+@media (prefers-color-scheme: dark) {
+    html, body, .stApp, [data-testid="stAppViewContainer"] {
+        background: #ffffff !important;
+        color: #111827 !important;
+    }
+
+    [data-testid="stHeader"] {
+        background: rgba(255,255,255,0.96) !important;
+    }
+
+    [data-testid="stToolbar"] {
+        color: #111827 !important;
     }
 }
 </style>
@@ -542,10 +551,8 @@ with tab4:
     if st.button("4번 제출", type="primary", key="submit4"):
         answers = [q4_1.strip(), q4_2.strip()]
         if Counter(answers) == Counter(Q4_ANSWERS):
-            st.session_state.q4_correct = True
             st.success("파생어를 모두 정확하게 찾았습니다!")
         else:
-            st.session_state.q4_correct = False
             st.warning("파생어를 다시 확인해 보세요.")
             with st.expander("힌트 보기"):
                 st.write("어근에 접사가 붙어 새 단어가 된 경우를 찾아보세요.")
@@ -555,51 +562,45 @@ with tab5:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>', unsafe_allow_html=True)
     st.subheader("5. 문항 4에서 찾은 파생어를 형태소 단위로 분석하세요.")
 
-    if not st.session_state.q4_correct:
-        st.info("문항 4를 먼저 정확하게 해결한 뒤 풀 수 있습니다.")
-    else:
-        st.markdown("""
-        <div class="condition-box">
-        ✅ 형태소 분석 시 붙임표를 정확하게 표시하세요.
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""
+    <div class="condition-box">
+    ✅ 형태소 분석 시 붙임표를 정확하게 표시하세요.
+    </div>
+    """, unsafe_allow_html=True)
 
-        q5_1 = st.text_input("지우개", key="q5_1")
-        q5_2 = st.text_input("깨끗이", key="q5_2")
+    q5_1 = st.text_input("지우개", key="q5_1")
+    q5_2 = st.text_input("깨끗이", key="q5_2")
 
-        if st.button("5번 제출", type="primary", key="submit5"):
-            wrong = []
-            if normalize_sequence(q5_1) != Q5_ANSWERS["지우개"]:
-                wrong.append("지우개")
-            if normalize_sequence(q5_2) != Q5_ANSWERS["깨끗이"]:
-                wrong.append("깨끗이")
-            if not wrong:
-                st.success("두 파생어의 형태소 분석이 모두 정확합니다!")
-            else:
-                st.warning("다시 확인할 단어: " + ", ".join(wrong))
-                st.info("형태소의 순서와 붙임표 위치까지 확인해 보세요.")
+    if st.button("5번 제출", type="primary", key="submit5"):
+        wrong = []
+        if normalize_sequence(q5_1) != Q5_ANSWERS["지우개"]:
+            wrong.append("지우개")
+        if normalize_sequence(q5_2) != Q5_ANSWERS["깨끗이"]:
+            wrong.append("깨끗이")
+        if not wrong:
+            st.success("두 파생어의 형태소 분석이 모두 정확합니다!")
+        else:
+            st.warning("다시 확인할 단어: " + ", ".join(wrong))
+            st.info("형태소의 순서와 붙임표 위치까지 확인해 보세요.")
 
 # 문항 6
 with tab6:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>', unsafe_allow_html=True)
     st.subheader("6. 문항 4에서 찾은 각 파생어의 품사를 쓰세요.")
 
-    if not st.session_state.q4_correct:
-        st.info("문항 4를 먼저 정확하게 해결한 뒤 풀 수 있습니다.")
-    else:
-        q6_1 = st.text_input("지우개", placeholder="품사 입력", key="q6_1")
-        q6_2 = st.text_input("깨끗이", placeholder="품사 입력", key="q6_2")
+    q6_1 = st.text_input("지우개", placeholder="품사 입력", key="q6_1")
+    q6_2 = st.text_input("깨끗이", placeholder="품사 입력", key="q6_2")
 
-        if st.button("6번 제출", type="primary", key="submit6"):
-            wrong = []
-            if q6_1.strip() != Q6_ANSWERS["지우개"]:
-                wrong.append("지우개")
-            if q6_2.strip() != Q6_ANSWERS["깨끗이"]:
-                wrong.append("깨끗이")
-            if not wrong:
-                st.success("두 파생어의 품사를 모두 정확하게 썼습니다!")
-            else:
-                st.warning("다시 확인할 단어: " + ", ".join(wrong))
+    if st.button("6번 제출", type="primary", key="submit6"):
+        wrong = []
+        if q6_1.strip() != Q6_ANSWERS["지우개"]:
+            wrong.append("지우개")
+        if q6_2.strip() != Q6_ANSWERS["깨끗이"]:
+            wrong.append("깨끗이")
+        if not wrong:
+            st.success("두 파생어의 품사를 모두 정확하게 썼습니다!")
+        else:
+            st.warning("다시 확인할 단어: " + ", ".join(wrong))
 
 # 문항 7
 with tab7:
@@ -704,10 +705,8 @@ with tab9:
     if st.button("9번 제출", type="primary", key="submit9"):
         answers = [q9_1.strip(), q9_2.strip()]
         if Counter(answers) == Counter(Q9_ANSWERS):
-            st.session_state.q9_correct = True
             st.success("파생어를 모두 정확하게 찾았습니다!")
         else:
-            st.session_state.q9_correct = False
             st.warning("파생어를 다시 확인해 보세요.")
             with st.expander("힌트 보기"):
                 st.write("어근에 접사가 붙어 새 단어가 된 경우를 찾아보세요.")
@@ -718,55 +717,47 @@ with tab10:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
     st.subheader("10. 문항 9에서 찾은 파생어를 형태소 단위로 분석하세요.")
 
-    if not st.session_state.q9_correct:
-        st.info("문항 9를 먼저 정확하게 해결한 뒤 풀 수 있습니다.")
-    else:
-        st.markdown("""
-        <div class="condition-box">
-        ✅ 형태소 분석 시 붙임표를 정확하게 표시하세요.
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""
+    <div class="condition-box">
+    ✅ 형태소 분석 시 붙임표를 정확하게 표시하세요.
+    </div>
+    """, unsafe_allow_html=True)
 
-        q10_1 = st.text_input("풋사과", key="q10_1")
-        q10_2 = st.text_input("가지런히", key="q10_2")
+    q10_1 = st.text_input("풋사과", key="q10_1")
+    q10_2 = st.text_input("가지런히", key="q10_2")
 
-        if st.button("10번 제출", type="primary", key="submit10"):
-            wrong = []
-            if normalize_sequence(q10_1) != Q10_ANSWERS["풋사과"]:
-                wrong.append("풋사과")
-            if normalize_sequence(q10_2) != Q10_ANSWERS["가지런히"]:
-                wrong.append("가지런히")
+    if st.button("10번 제출", type="primary", key="submit10"):
+        wrong = []
+        if normalize_sequence(q10_1) != Q10_ANSWERS["풋사과"]:
+            wrong.append("풋사과")
+        if normalize_sequence(q10_2) != Q10_ANSWERS["가지런히"]:
+            wrong.append("가지런히")
 
-            if not wrong:
-                st.success("두 파생어의 형태소 분석이 모두 정확합니다!")
-            else:
-                st.warning("다시 확인할 단어: " + ", ".join(wrong))
-                st.info("형태소의 순서와 붙임표 위치까지 확인해 보세요.")
-
+        if not wrong:
+            st.success("두 파생어의 형태소 분석이 모두 정확합니다!")
+        else:
+            st.warning("다시 확인할 단어: " + ", ".join(wrong))
+            st.info("형태소의 순서와 붙임표 위치까지 확인해 보세요.")
 
 # 문항 11
 with tab11:
     st.markdown(f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_3}</div>', unsafe_allow_html=True)
     st.subheader("11. 문항 9에서 찾은 각 파생어의 품사를 쓰세요.")
 
-    if not st.session_state.q9_correct:
-        st.info("문항 9를 먼저 정확하게 해결한 뒤 풀 수 있습니다.")
-    else:
-        q11_1 = st.text_input("풋사과", placeholder="품사 입력", key="q11_1")
-        q11_2 = st.text_input("가지런히", placeholder="품사 입력", key="q11_2")
+    q11_1 = st.text_input("풋사과", placeholder="품사 입력", key="q11_1")
+    q11_2 = st.text_input("가지런히", placeholder="품사 입력", key="q11_2")
 
-        if st.button("11번 제출", type="primary", key="submit11"):
-            wrong = []
-            if q11_1.strip() != Q11_ANSWERS["풋사과"]:
-                wrong.append("풋사과")
-            if q11_2.strip() != Q11_ANSWERS["가지런히"]:
-                wrong.append("가지런히")
+    if st.button("11번 제출", type="primary", key="submit11"):
+        wrong = []
+        if q11_1.strip() != Q11_ANSWERS["풋사과"]:
+            wrong.append("풋사과")
+        if q11_2.strip() != Q11_ANSWERS["가지런히"]:
+            wrong.append("가지런히")
 
-            if not wrong:
-                st.success("두 파생어의 품사를 모두 정확하게 썼습니다!")
-            else:
-                st.warning("다시 확인할 단어: " + ", ".join(wrong))
-
+        if not wrong:
+            st.success("두 파생어의 품사를 모두 정확하게 썼습니다!")
+        else:
+            st.warning("다시 확인할 단어: " + ", ".join(wrong))
 
 # 문항 12
 with tab12:
