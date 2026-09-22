@@ -10,6 +10,7 @@ st.set_page_config(
 )
 
 SENTENCE = "먹구름이 가득 낀 하늘은 늘 철수가 공포에 잡아먹히게 하였다."
+SENTENCE_2 = "착한 형은 지우개로 낡은 공책의 글씨를 깨끗이 지웠다."
 
 # -----------------------------
 # 정답 데이터
@@ -112,6 +113,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+if "q4_submitted" not in st.session_state:
+    st.session_state.q4_submitted = False
+
 st.title("📝 퇴계원중 1학년 중간고사 대비 문항 연습")
 st.caption("중간고사에 필요한 국어 문법 개념을 문항별로 연습합니다.")
 
@@ -120,7 +124,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(["1️⃣ 문항 1", "2️⃣ 문항 2", "3️⃣ 문항 3"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["1️⃣ 문항 1", "2️⃣ 문항 2", "3️⃣ 문항 3", "4️⃣ 문항 4", "5️⃣ 문항 5", "6️⃣ 문항 6"])
 
 
 # =========================================================
@@ -230,6 +234,12 @@ with tab2:
                 st.warning("아직 쓰지 않은 단어: " + ", ".join(blank))
             if wrong:
                 st.warning("다시 확인할 단어: " + ", ".join(wrong))
+
+            if "잡아먹히게" in wrong:
+                with st.expander("💡 '잡아먹히게' 힌트 보기"):
+                    st.write("1. 이 말에는 기본형이 있는가?")
+                    st.write("2. 기본형이 있어 활용한 것이라면, 그 기본형은 움직임이나 작용을 나타내는가, 성질이나 상태를 나타내는가?")
+
             st.info("정답은 바로 보여주지 않습니다. 해당 단어만 고쳐서 다시 제출해 보세요.")
 
 
@@ -280,6 +290,105 @@ with tab3:
             st.success("네 종류의 형태소를 모두 정확하게 분류했습니다!")
         else:
             st.info("틀린 칸만 수정한 뒤 다시 제출할 수 있습니다.")
+
+
+# =========================================================
+# 문항 4
+# =========================================================
+with tab4:
+    st.markdown(
+        f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("4. 윗문장에서 파생어를 모두 찾아 쓰세요.")
+
+    q4_word1 = st.text_input("파생어 1", key="q4_word1")
+    q4_word2 = st.text_input("파생어 2", key="q4_word2")
+
+    if st.button("4번 제출", type="primary", key="submit_q4"):
+        st.session_state.q4_submitted = True
+        answers = [q4_word1.strip(), q4_word2.strip()]
+
+        if Counter(answers) == Counter(Q4_ANSWERS):
+            st.success("파생어를 모두 정확하게 찾았습니다!")
+        else:
+            st.warning("파생어를 다시 확인해 보세요.")
+            with st.expander("힌트 보기"):
+                st.write("어근에 접사가 붙어 새 단어가 된 경우를 찾아보세요.")
+
+
+# =========================================================
+# 문항 5
+# =========================================================
+with tab5:
+    st.markdown(
+        f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("5. 문항 4에서 찾은 파생어를 형태소 단위로 분석하세요.")
+
+    if not st.session_state.q4_submitted:
+        st.info("먼저 문항 4를 제출한 뒤 풀 수 있습니다.")
+    else:
+        st.markdown(
+            """
+            <div class="condition-box">
+            ✅ 형태소 분석 시 붙임표를 정확하게 표시하세요.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        q5_j = st.text_input("지우개", key="q5_j")
+        q5_k = st.text_input("깨끗이", key="q5_k")
+
+        if st.button("5번 제출", type="primary", key="submit_q5"):
+            wrong = []
+
+            if normalize_sequence(q5_j) != Q5_ANSWERS["지우개"]:
+                wrong.append("지우개")
+            if normalize_sequence(q5_k) != Q5_ANSWERS["깨끗이"]:
+                wrong.append("깨끗이")
+
+            if not wrong:
+                st.success("두 파생어의 형태소 분석이 모두 정확합니다!")
+            else:
+                st.warning("다시 확인할 단어: " + ", ".join(wrong))
+                st.info("형태소의 순서와 붙임표 위치까지 확인해 보세요.")
+
+
+# =========================================================
+# 문항 6
+# =========================================================
+with tab6:
+    st.markdown(
+        f'<div class="sentence-box"><b>문장</b><br>{SENTENCE_2}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("6. 문항 4에서 찾은 각 파생어의 품사를 쓰세요.")
+
+    if not st.session_state.q4_submitted:
+        st.info("먼저 문항 4를 제출한 뒤 풀 수 있습니다.")
+    else:
+        q6_j = st.text_input("지우개", placeholder="품사 입력", key="q6_j")
+        q6_k = st.text_input("깨끗이", placeholder="품사 입력", key="q6_k")
+
+        if st.button("6번 제출", type="primary", key="submit_q6"):
+            wrong = []
+
+            if q6_j.strip() != Q6_ANSWERS["지우개"]:
+                wrong.append("지우개")
+            if q6_k.strip() != Q6_ANSWERS["깨끗이"]:
+                wrong.append("깨끗이")
+
+            if not wrong:
+                st.success("두 파생어의 품사를 모두 정확하게 썼습니다!")
+            else:
+                st.warning("다시 확인할 단어: " + ", ".join(wrong))
+                st.info("정답은 바로 보여주지 않습니다. 해당 단어만 고쳐서 다시 제출해 보세요.")
 
 
 st.divider()
