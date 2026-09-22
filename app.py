@@ -26,6 +26,8 @@ Q2_ANSWERS = {
     "를": "조사", "공포": "명사", "에": "조사", "사로잡히게": "동사", "하였다": "동사",
 }
 
+Q3_BOTH_ANSWERS = ["구름", "가득", "하늘", "늘", "철수", "공포"]
+
 Q3_ANSWERS = {
     "자립 형태소": ["구름", "가득", "하늘", "늘", "철수", "공포"],
     "의존 형태소": [
@@ -89,6 +91,8 @@ Q8_ANSWERS = {
 }
 
 
+Q9_BOTH_ANSWERS = ["형", "공책", "글씨"]
+
 Q9_TYPE_ANSWERS = {
     "자립 형태소": ["형", "공책", "글씨"],
     "의존 형태소": [
@@ -98,6 +102,8 @@ Q9_TYPE_ANSWERS = {
     "실질 형태소": ["착하-", "형", "지우-", "낡-", "공책", "글씨", "깨끗", "지우-"],
     "형식 형태소": ["-ㄴ", "은", "-개", "로", "-은", "의", "를", "-이", "-었-", "-다"],
 }
+
+Q14_BOTH_ANSWERS = ["동생", "사과", "접시"]
 
 Q14_TYPE_ANSWERS = {
     "자립 형태소": ["동생", "사과", "접시"],
@@ -548,6 +554,7 @@ with tab3:
     b = st.text_area("의존 형태소", key="q3_b")
     c = st.text_area("실질 형태소", key="q3_c")
     d = st.text_area("형식 형태소", key="q3_d")
+    e = st.text_area("자립 형태소이자 실질 형태소인 것은?", key="q3_e")
 
     if st.button("3번 제출", type="primary", key="submit3"):
         user_map = {"자립 형태소": a, "의존 형태소": b, "실질 형태소": c, "형식 형태소": d}
@@ -558,8 +565,15 @@ with tab3:
             else:
                 all_ok = False
                 st.warning(f"{cat}: 누락·중복 또는 붙임표 위치를 다시 확인해 보세요.")
+
+        if exact_multiset_match(e, Q3_BOTH_ANSWERS):
+            st.success("자립 형태소이자 실질 형태소: 정확합니다.")
+        else:
+            all_ok = False
+            st.warning("자립 형태소이자 실질 형태소: 다시 확인해 보세요.")
+
         if all_ok:
-            st.success("네 종류의 형태소를 모두 정확하게 분류했습니다!")
+            st.success("모든 항목을 정확하게 분류했습니다!")
 
 # 문항 4
 with tab4:
@@ -733,6 +747,7 @@ with tab9:
     q9_dependent = st.text_area("의존 형태소", key="q9_dependent")
     q9_lexical = st.text_area("실질 형태소", key="q9_lexical")
     q9_grammatical = st.text_area("형식 형태소", key="q9_grammatical")
+    q9_both = st.text_area("자립 형태소이자 실질 형태소인 것은?", key="q9_both")
 
     if st.button("9번 제출", type="primary", key="submit9_types"):
         user_map = {
@@ -750,8 +765,14 @@ with tab9:
                 all_ok = False
                 st.warning(f"{category}: 누락·중복 또는 붙임표 위치를 다시 확인해 보세요.")
 
+        if exact_multiset_match(q9_both, Q9_BOTH_ANSWERS):
+            st.success("자립 형태소이자 실질 형태소: 정확합니다.")
+        else:
+            all_ok = False
+            st.warning("자립 형태소이자 실질 형태소: 다시 확인해 보세요.")
+
         if all_ok:
-            st.success("네 종류의 형태소를 모두 정확하게 분류했습니다!")
+            st.success("모든 항목을 정확하게 분류했습니다!")
 
 
 # 문항 10
@@ -885,6 +906,7 @@ with tab14:
     q14_dependent = st.text_area("의존 형태소", key="q14_dependent")
     q14_lexical = st.text_area("실질 형태소", key="q14_lexical")
     q14_grammatical = st.text_area("형식 형태소", key="q14_grammatical")
+    q14_both = st.text_area("자립 형태소이자 실질 형태소인 것은?", key="q14_both")
 
     if st.button("14번 제출", type="primary", key="submit14_types"):
         user_map = {
@@ -902,8 +924,14 @@ with tab14:
                 all_ok = False
                 st.warning(f"{category}: 누락·중복 또는 붙임표 위치를 다시 확인해 보세요.")
 
+        if exact_multiset_match(q14_both, Q14_BOTH_ANSWERS):
+            st.success("자립 형태소이자 실질 형태소: 정확합니다.")
+        else:
+            all_ok = False
+            st.warning("자립 형태소이자 실질 형태소: 다시 확인해 보세요.")
+
         if all_ok:
-            st.success("네 종류의 형태소를 모두 정확하게 분류했습니다!")
+            st.success("모든 항목을 정확하게 분류했습니다!")
 
 
 # 문항 15
