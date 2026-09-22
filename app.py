@@ -4,7 +4,7 @@ import streamlit as st
 
 st.set_page_config(
     page_title="퇴계원중 1학년 중간고사 대비 문항 연습",
-    page_icon="📝",
+    page_icon="✏️",
     layout="centered",
 )
 
@@ -152,26 +152,265 @@ if "q9_correct" not in st.session_state:
 
 st.markdown("""
 <style>
-.block-container {max-width: 980px; padding-top: 2rem; padding-bottom: 3rem;}
-.sentence-box {
-    background: #eef6ff;
-    border: 1px solid #b8d8ff;
-    border-radius: 14px;
-    padding: 18px 20px;
-    font-size: 1.08rem;
-    margin: 10px 0 20px 0;
+:root {
+    --bg: #fffaf1;
+    --surface: #fffdf8;
+    --surface-soft: #fff7ef;
+    --mint: #d9efe7;
+    --mint-deep: #8fbeb0;
+    --mint-border: #c7e8dc;
+    --coral: #f5a69a;
+    --coral-deep: #ea8f81;
+    --text-main: #3e4a49;
+    --text-soft: #6d7674;
+    --line: #efe6da;
+    --shadow: 0 8px 24px rgba(96, 88, 72, 0.05);
+    --radius-card: 20px;
+    --radius-btn: 16px;
 }
+
+html, body, [class*="css"] {
+    color: var(--text-main);
+}
+
+.stApp {
+    background:
+        radial-gradient(circle at top right, rgba(217, 239, 231, 0.28), transparent 22%),
+        radial-gradient(circle at top left, rgba(245, 166, 154, 0.10), transparent 20%),
+        var(--bg);
+}
+
+.block-container {
+    max-width: 1080px;
+    padding-top: 2rem;
+    padding-bottom: 3.5rem;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+}
+
+h1, h2, h3 {
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+}
+
+h2, h3 {
+    font-weight: 750;
+}
+
+p, label, .stCaption {
+    color: var(--text-soft);
+}
+
+div[data-testid="stTabs"] {
+    margin-top: 1rem;
+}
+
+div[data-baseweb="tab-list"] {
+    gap: 0.45rem;
+    background: rgba(255, 253, 248, 0.88);
+    border: 1px solid var(--line);
+    padding: 0.45rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+div[data-baseweb="tab-list"]::-webkit-scrollbar {
+    display: none;
+}
+
+button[data-baseweb="tab"] {
+    height: auto;
+    white-space: nowrap;
+    border-radius: 16px !important;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-soft);
+    font-weight: 700;
+    padding: 0.65rem 1rem;
+    transition: all 0.18s ease;
+}
+
+button[data-baseweb="tab"]:hover {
+    background: #fffaf4;
+    border-color: var(--line);
+    color: var(--text-main);
+}
+
+button[aria-selected="true"][data-baseweb="tab"] {
+    background: var(--mint);
+    border-color: var(--mint-border);
+    color: var(--text-main);
+    box-shadow: 0 4px 14px rgba(143, 190, 176, 0.12);
+}
+
+div[data-testid="stVerticalBlock"] > div:has(> .sentence-box),
+div[data-testid="stVerticalBlock"] > div:has(> .condition-box) {
+    width: 100%;
+}
+
+.sentence-box {
+    background: linear-gradient(180deg, #f8fffc 0%, #f6fbf8 100%);
+    border: 1px solid var(--mint-border);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    margin: 10px 0 22px 0;
+    box-shadow: var(--shadow);
+}
+
+.sentence-box b {
+    display: inline-block;
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+    color: var(--text-main);
+}
+
 .condition-box {
-    background: #f5f5f5;
-    border-radius: 12px;
-    padding: 14px 18px;
-    margin: 8px 0 18px 0;
-    line-height: 1.85;
+    background: linear-gradient(180deg, #fffdf9 0%, #fff8f2 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+    margin: 10px 0 20px 0;
+    line-height: 1.9;
+    box-shadow: var(--shadow);
+}
+
+div[data-testid="stTextInputRootElement"] > div,
+div[data-testid="stTextAreaRootElement"] textarea,
+div[data-baseweb="input"] > div {
+    border-radius: 20px !important;
+}
+
+div[data-baseweb="input"] > div,
+div[data-testid="stTextAreaRootElement"] textarea {
+    background: var(--surface) !important;
+    border: 1px solid #eadfd2 !important;
+    box-shadow: inset 0 1px 2px rgba(120, 105, 88, 0.03);
+    color: var(--text-main) !important;
+}
+
+div[data-baseweb="input"] > div:hover,
+div[data-testid="stTextAreaRootElement"] textarea:hover {
+    border-color: var(--mint-border) !important;
+}
+
+div[data-baseweb="input"] > div:focus-within,
+div[data-testid="stTextAreaRootElement"] textarea:focus {
+    border-color: var(--mint-deep) !important;
+    box-shadow: 0 0 0 4px rgba(217, 239, 231, 0.55) !important;
+}
+
+label[data-testid="stWidgetLabel"] p {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+button[kind="primary"],
+button[kind="secondary"],
+div.stButton > button {
+    border-radius: var(--radius-btn) !important;
+    min-height: 46px;
+    padding: 0.62rem 1.15rem;
+    font-weight: 700;
+    border: 1px solid transparent;
+    box-shadow: 0 6px 18px rgba(234, 143, 129, 0.14);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+div.stButton > button[kind="primary"] {
+    background: var(--coral);
+    color: white;
+}
+
+div.stButton > button[kind="primary"]:hover {
+    background: var(--coral-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(234, 143, 129, 0.18);
+}
+
+div.stButton > button[kind="secondary"] {
+    background: var(--surface);
+    color: var(--text-main);
+    border-color: var(--line);
+}
+
+div.stButton > button[kind="secondary"]:hover {
+    background: var(--surface-soft);
+    border-color: var(--mint-border);
+}
+
+div[data-testid="stAlert"] {
+    border-radius: var(--radius-card);
+    border: none;
+    box-shadow: var(--shadow);
+}
+
+div[data-testid="stExpander"] {
+    border-radius: var(--radius-card);
+    border: 1px solid var(--line);
+    background: rgba(255, 253, 248, 0.9);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+div[data-testid="stExpander"] details summary {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+hr {
+    border-color: var(--line);
+    margin-top: 2.2rem;
+    margin-bottom: 1.4rem;
+}
+
+@media (max-width: 768px) {
+    .block-container {
+        padding-top: 1.1rem;
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+        padding-bottom: 2.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        line-height: 1.25;
+    }
+
+    h2, h3 {
+        font-size: 1.45rem;
+        line-height: 1.3;
+    }
+
+    .sentence-box,
+    .condition-box {
+        padding: 16px 16px;
+        border-radius: 18px;
+    }
+
+    div.stButton > button {
+        width: 100%;
+    }
+
+    button[data-baseweb="tab"] {
+        padding: 0.58rem 0.9rem;
+        font-size: 0.96rem;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("📝 퇴계원중 1학년 중간고사 대비 문항 연습")
+st.title("퇴계원중 1학년 중간고사 대비 문항 연습")
 st.caption("중간고사에 필요한 국어 문법 개념을 문항별로 연습합니다.")
 
 tabs = st.tabs([
